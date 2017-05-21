@@ -2,6 +2,8 @@ package fingo.recruitment.task.dto;
 
 import fingo.recruitment.task.domain.ProductCategory;
 
+import java.util.Objects;
+
 public class ProductDto {
 
     private Long id;
@@ -14,6 +16,36 @@ public class ProductDto {
 
     private Boolean bought = Boolean.FALSE;
 
+    public ProductDto() {
+    }
+
+    public ProductDto(Long id, String name, ProductCategory category, Integer number, Boolean bought) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.number = number;
+        this.bought = bought;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (!(o instanceof ProductDto)) return false;
+        ProductDto productDto = (ProductDto) o;
+        if (Objects.equals(this.getId(),productDto.getId()) &&
+                Objects.equals(this.getName(), productDto.getName()) &&
+                Objects.equals(this.getCategory(), productDto.getCategory()) &&
+                Objects.equals(this.getBought(), productDto.getBought())) {
+            return true;
+        } else
+            return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(this.id, this.name, this.category, this.number, this.bought);
+    }
     //region Getters and setters
     public Long getId() {
         return id;

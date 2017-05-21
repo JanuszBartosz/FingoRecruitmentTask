@@ -20,6 +20,17 @@ public class Product {
 
     private Boolean bought;
 
+    public Product() {
+    }
+
+    public Product(Long id, String name, ProductCategory category, Integer number, Boolean bought) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.number = number;
+        this.bought = bought;
+    }
+
     //region Getters and setters
     public Long getId() {
         return id;

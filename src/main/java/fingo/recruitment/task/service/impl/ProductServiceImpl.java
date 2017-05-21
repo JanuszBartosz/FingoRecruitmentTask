@@ -3,6 +3,7 @@ package fingo.recruitment.task.service.impl;
 import fingo.recruitment.task.domain.Product;
 import fingo.recruitment.task.dto.ProductDto;
 import fingo.recruitment.task.repository.ProductRepository;
+import fingo.recruitment.task.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class ProductServiceImpl implements fingo.recruitment.task.service.ProductService {
+public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
 
@@ -51,10 +52,7 @@ public class ProductServiceImpl implements fingo.recruitment.task.service.Produc
     @Override
     public ProductDto get(Long id) {
         Product product = productRepository.findOne(id);
-        if (product != null)
-            return mapEntityToDto(product);
-        else
-            return null;
+        return (product != null) ? mapEntityToDto(product) : null;
     }
 
     @Override
