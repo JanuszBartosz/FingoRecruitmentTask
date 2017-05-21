@@ -14,39 +14,43 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    ProductController(ProductService productService){
+    ProductController(ProductService productService) {
         this.productService = productService;
     }
 
+    @RequestMapping(value = "/products/{productId}", method = RequestMethod.GET)
+    public ProductDto getProduct(@PathVariable Long productId) {
+        ProductDto productDto = productService.get(productId);
+        if(productDto !=null)
+            return productDto;
+        else
+            return null;
+    }
+
     @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public List<ProductDto> listProducts(@RequestParam(defaultValue = "false") Boolean sorted){
+    public List<ProductDto> getProducts(@RequestParam(defaultValue = "false") Boolean sorted) {
         if (sorted)
             return productService.getAllSortedByCategory();
         else
             return productService.getAll();
     }
 
-//    @RequestMapping(value = "/products/sorted", method = RequestMethod.GET)
-//    public List<ProductDto> listProductsSorted(){
-//        return productService.getAllSortedByCategory();
-//    }
-
-    @RequestMapping(value = "/products", method = RequestMethod.PUT)
-    public HttpStatus addProduct(@RequestBody ProductDto productDto){
+    @RequestMapping(value = "/products", method = RequestMethod.POST)
+    public HttpStatus addProduct(@RequestBody ProductDto productDto) {
         productService.saveOrUpdate(productDto);
         return HttpStatus.OK;
     }
 
-    @RequestMapping(value = "/products", method = RequestMethod.DELETE)
-    public HttpStatus removeProduct(@RequestBody ProductDto productDto){
-        productService.remove(productDto);
+
+    @RequestMapping(value = "/products/{productId}", method = RequestMethod.PATCH)
+    public HttpStatus setBought(@PathVariable Long productId) {
+        productService.setBought(productId);
         return HttpStatus.OK;
     }
 
-    @RequestMapping(value = "/products", method = RequestMethod.POST)
-    public HttpStatus setBought(@RequestBody ProductDto productDto){
-        productService.setBought(productDto);
+    @RequestMapping(value = "/products/{productId}", method = RequestMethod.DELETE)
+    public HttpStatus removeProduct(@PathVariable Long productId) {
+        productService.remove(productId);
         return HttpStatus.OK;
     }
-
 }

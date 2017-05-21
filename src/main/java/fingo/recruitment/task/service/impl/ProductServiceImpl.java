@@ -6,6 +6,7 @@ import fingo.recruitment.task.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ public class ProductServiceImpl implements fingo.recruitment.task.service.Produc
     private ProductRepository productRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository){
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -48,20 +49,12 @@ public class ProductServiceImpl implements fingo.recruitment.task.service.Produc
     }
 
     @Override
-    public void saveOrUpdate(ProductDto productDto) {
-        Optional<Product> product = productRepository.findOneByName(productDto.getName());
-        if (product.isPresent()) {
-            Product oldProduct = product.get();
-            oldProduct.setCategory(productDto.getCategory());
-            oldProduct.setNumber(productDto.getNumber());
-            productRepository.save(oldProduct);
-        }else
-            productRepository.save(mapDtoToEntity(productDto));
-    }
-
-    @Override
     public ProductDto get(Long id) {
-        return mapEntityToDto(productRepository.findOne(id));
+        Product product = productRepository.findOne(id);
+        if (product != null)
+            return mapEntityToDto(product);
+        else
+            return null;
     }
 
     @Override
@@ -72,34 +65,37 @@ public class ProductServiceImpl implements fingo.recruitment.task.service.Produc
     }
 
     @Override
-    public void remove(ProductDto productDto) {
-        Product product = null;
-        if(productDto.getId()!=null)
-            product = productRepository.findOne(productDto.getId());
-            if(product==null)
-                return;
-        else if(productDto.getName()!=null) {
-                Optional<Product> productOptional = productRepository.findOneByName(productDto.getName());
-                if(productOptional.isPresent())
-                    product = productOptional.get();
-        }
-        productRepository.delete(product);
-    }
-
-    @Override
     public List<ProductDto> getAllSortedByCategory() {
         return getAll().stream()
-                .sorted((p1, p2) -> p1.getCategory().compareTo(p2.getCategory())) //można dać Comparator.comparing
+                .sorted(Comparator.comparing(ProductDto::getCategory))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void setBought(ProductDto productDto){
-        if(productDto.getId()!=null) {
-            Product product = productRepository.findOne(productDto.getId());
+    public void saveOrUpdate(ProductDto productDto) {
+        Optional<Product> product = productRepository.findOneByName(productDto.getName());
+        if (product.isPresent()) {
+            Product oldProduct = product.get();
+            oldProduct.setCategory(productDto.getCategory());
+            oldProduct.setNumber(productDto.getNumber());
+            productRepository.save(oldProduct);
+        } else
+            productRepository.save(mapDtoToEntity(productDto));
+    }
+
+    @Override
+    public void setBought(Long productId) {
+        Product product = productRepository.findOne(productId);
+        if (product != null && !product.getBought()) {
             product.setBought(Boolean.TRUE);
             productRepository.save(product);
         }
     }
 
+    @Override
+    public void remove(Long productId) {
+        Product product = productRepository.findOne(productId);
+        if (product != null && !product.getBought())
+            productRepository.delete(product);
+    }
 }

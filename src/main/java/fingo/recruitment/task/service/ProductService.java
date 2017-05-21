@@ -16,9 +16,9 @@ public interface ProductService {
 
     List<ProductDto> getAll();
 
-    void remove(ProductDto productDto);
+    void remove(Long productId);
 
     List<ProductDto> getAllSortedByCategory();
 
-    void setBought(ProductDto productDto);
+    void setBought(Long productId);
 }
