@@ -21,18 +21,17 @@ public class ProductController {
     @RequestMapping(value = "/products/{productId}", method = RequestMethod.GET)
     public ProductDto getProduct(@PathVariable Long productId) {
         ProductDto productDto = productService.get(productId);
-        if(productDto !=null)
-            return productDto;
-        else
-            return null;
+        return (productDto != null) ? productDto : null;
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     public List<ProductDto> getProducts(@RequestParam(defaultValue = "false") Boolean sorted) {
-        if (sorted)
+        if (sorted) {
             return productService.getAllSortedByCategory();
-        else
+        }
+        else {
             return productService.getAll();
+        }
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.POST)
@@ -40,7 +39,6 @@ public class ProductController {
         productService.saveOrUpdate(productDto);
         return HttpStatus.OK;
     }
-
 
     @RequestMapping(value = "/products/{productId}", method = RequestMethod.PATCH)
     public HttpStatus setBought(@PathVariable Long productId) {

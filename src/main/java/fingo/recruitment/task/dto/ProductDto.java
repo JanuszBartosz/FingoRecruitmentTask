@@ -14,9 +14,17 @@ public class ProductDto {
 
     private Integer number;
 
-    private Boolean bought = Boolean.FALSE;
+    private Boolean bought;
 
     public ProductDto() {
+        this.bought = Boolean.FALSE;
+    }
+
+    public ProductDto(String name, ProductCategory category, Integer number) {
+        this.name = name;
+        this.category = category;
+        this.number = number;
+        this.bought = Boolean.FALSE;
     }
 
     public ProductDto(Long id, String name, ProductCategory category, Integer number, Boolean bought) {

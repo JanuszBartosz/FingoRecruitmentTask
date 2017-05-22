@@ -10,15 +10,15 @@ public interface ProductService {
 
     Product mapDtoToEntity(ProductDto productDto);
 
-    void saveOrUpdate(ProductDto productDto);
-
     ProductDto get(Long id);
 
     List<ProductDto> getAll();
 
-    void remove(Long productId);
-
     List<ProductDto> getAllSortedByCategory();
 
-    void setBought(Long productId);
+    Product saveOrUpdate(ProductDto productDto);
+
+    Product setBought(Long productId);
+
+    void remove(Long productId);
 }
