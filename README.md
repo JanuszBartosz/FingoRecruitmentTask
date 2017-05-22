@@ -2,12 +2,16 @@
 
 Example for adding new item:
 
-Method = POST
+Method = POST 
+
 Body:
 
 {
+
 	"name":"steak",
+	
 	"category":"MEAT",
+	
 	"number":10
 }
 
