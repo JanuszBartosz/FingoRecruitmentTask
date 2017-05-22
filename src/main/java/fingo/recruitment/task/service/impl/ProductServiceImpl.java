@@ -69,14 +69,13 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-    //If product exists, but bought=false, product is updated with new category and number.
+    //If product exists, but bought=false, product is updated with new number.
     //If product exists and is bought, new product is added.
     @Override
     public Product saveOrUpdate(ProductDto productDto) {
         Optional<Product> product = productRepository.findOneByName(productDto.getName());
         if (product.isPresent() && !product.get().getBought()) {
             Product oldProduct = product.get();
-            oldProduct.setCategory(productDto.getCategory());
             oldProduct.setNumber(productDto.getNumber());
             return productRepository.save(oldProduct);
         } else

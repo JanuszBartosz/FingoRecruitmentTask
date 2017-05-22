@@ -156,7 +156,7 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    public void saveOrUpdateExistingNotBought() throws Exception {
+    public void saveOrUpdateExisting() throws Exception {
         //Given
         Long id = 1L;
         String name = "apple";
@@ -167,11 +167,10 @@ public class ProductServiceImplTest {
 
         ProductDto productDto = new ProductDto(name, productCategory, number);
         Product existingProduct = new Product(id, name, productCategory, number, bought);
-        Product newProduct = new Product(id, name, productCategory, newNumber, bought);
+        Product updatedExistingProduct = new Product(id, name, productCategory, newNumber, bought);
 
         Mockito.when(productRepository.findOneByName(productDto.getName())).thenReturn(Optional.of(existingProduct));
-        Mockito.when(productRepository.save(existingProduct)).thenReturn(newProduct);
-        Mockito.when(productRepository.save(newProduct)).thenReturn(newProduct);
+        Mockito.when(productRepository.save(existingProduct)).thenReturn(updatedExistingProduct);
 
         //When
         Product returnedProduct = productServiceImpl.saveOrUpdate(productDto);
@@ -182,6 +181,7 @@ public class ProductServiceImplTest {
         assertEquals(newNumber, returnedProduct.getNumber());
         assertEquals(bought, returnedProduct.getBought());
     }
+
 
     @Test
     public void setBought() throws Exception {

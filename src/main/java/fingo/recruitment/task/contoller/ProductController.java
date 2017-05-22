@@ -1,5 +1,6 @@
 package fingo.recruitment.task.contoller;
 
+import fingo.recruitment.task.domain.Product;
 import fingo.recruitment.task.dto.ProductDto;
 import fingo.recruitment.task.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,26 +25,24 @@ public class ProductController {
         return (productDto != null) ? productDto : null;
     }
 
+    //Sorting by parameter /products?sorted=true
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     public List<ProductDto> getProducts(@RequestParam(defaultValue = "false") Boolean sorted) {
         if (sorted) {
             return productService.getAllSortedByCategory();
-        }
-        else {
+        } else {
             return productService.getAll();
         }
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.POST)
-    public HttpStatus addProduct(@RequestBody ProductDto productDto) {
-        productService.saveOrUpdate(productDto);
-        return HttpStatus.OK;
+    public Product addProduct(@RequestBody ProductDto productDto) {
+        return productService.saveOrUpdate(productDto);
     }
 
     @RequestMapping(value = "/products/{productId}", method = RequestMethod.PATCH)
-    public HttpStatus setBought(@PathVariable Long productId) {
-        productService.setBought(productId);
-        return HttpStatus.OK;
+    public Product setBought(@PathVariable Long productId) {
+        return productService.setBought(productId);
     }
 
     @RequestMapping(value = "/products/{productId}", method = RequestMethod.DELETE)
